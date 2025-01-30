@@ -9,6 +9,19 @@ exports.getArticles = async (req, res) => {
     }
 }
 
+exports.getArticlesById = async (req, res) => { 
+    try {
+        const { id } = req.params;
+        const article = await Article.findById(id);
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+        return res.json(article);
+    } catch (error) {
+        res.status(500).json({ message: 'There was an error fetching the article', error });
+    }
+}
+
 exports.createArticle = async (req, res) => { 
     const { name, price, size } = req.body;
     try {

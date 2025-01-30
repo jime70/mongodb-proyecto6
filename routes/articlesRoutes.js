@@ -1,10 +1,11 @@
 const express = require('express');
-const { createArticle, getArticles, updateArticleById, deleteArticleById} = require('../controllers/articlesController')
+const { createArticle, getArticles, getArticlesById, updateArticleById, deleteArticleById} = require('../controllers/articlesController')
 
 const ArticlesRoutes = express.Router();
 
 ArticlesRoutes.get('/', getArticles); //localhost:3003/api/articles/
-ArticlesRoutes.post('/add-articles', createArticle);  //localhost:3003/api/articles/add-articles
+ArticlesRoutes.get('/:id', getArticlesById); //localhost:3003/api/articles/:id
+ArticlesRoutes.post('/create', createArticle);  //localhost:3003/api/articles/create
 ArticlesRoutes.put('/update-articles/:id', updateArticleById); //localhost:3003/api/articles/update-articles/:id
 ArticlesRoutes.delete('/delete-articles/:id', deleteArticleById); //localhost:3003/api/articles/delete-articles/:id
 
