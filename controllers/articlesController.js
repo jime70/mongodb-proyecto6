@@ -49,6 +49,6 @@ exports.deleteArticleById = async (req, res) => {
         const articleDeleted = await Article.findByIdAndDelete(id);
         return res.json({ articleDeleted});
     } catch (error) {
-        res.status(500).json({ message: 'There was an error deleting the article, please try again', error });
+        res.status(500).json({ message: 'There was an error, please try again.', error });
     }
 };
