@@ -87,8 +87,8 @@ exports.updateClientById = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, username, email, password } = req.body;
-        const updateArticle = await Article.findByIdAndUpdate(id, { name, username, email, password}, { new: true });
-        res.json({updateArticle});
+        const updateClient = await Client.findByIdAndUpdate(id, { name, username, email, password}, { new: true });
+        res.json({updateClient});
     } catch (error) {
         res.status(500).json({ message: 'There was an error updating the information', error });
     }
