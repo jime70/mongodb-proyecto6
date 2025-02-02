@@ -1,0 +1,289 @@
+openapi: 3.0.0
+info:
+  title: PROYECTO-6 MONGO
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://mongodb-proyecto6.onrender.com/api
+  variables: {}
+paths:
+  /articles/readall:
+    get:
+      tags:
+      - Articles
+      summary: GET ALL ARTICLES
+      operationId: GETALLARTICLES
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /articles/readone/679aea33d6884d44f4399fb7:
+    get:
+      tags:
+      - Articles
+      summary: GET ARTICLE BY ID
+      operationId: GETARTICLEBYID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /articles/create:
+    post:
+      tags:
+      - Articles
+      summary: CREATE ARTICLE
+      operationId: CREATEARTICLE
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CREATEARTICLEREQUEST'
+              - example:
+                  name: Smarth mouse
+                  price: 25000
+                  size: S
+            example:
+              name: Smarth mouse
+              price: 25000
+              size: S
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /articles/update-articles/679f8f12a060274e52c428f9:
+    put:
+      tags:
+      - Articles
+      summary: UPDATE ARTICLE BY ID
+      operationId: UPDATEARTICLEBYID
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UPDATEARTICLEBYIDREQUEST'
+              - example:
+                  name: Interactive rubber smart mouse
+                  price: 25000
+                  size: S
+            example:
+              name: Interactive rubber smart mouse
+              price: 25000
+              size: S
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /articles/delete-articles/679aed53d6884d44f4399fcd:
+    delete:
+      tags:
+      - Articles
+      summary: DELETE ARTICLE
+      operationId: DELETEARTICLE
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /clients/register:
+    post:
+      tags:
+      - CLIENT
+      summary: CREATE CLIENT
+      operationId: CREATECLIENT
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CREATECLIENTREQUEST'
+              - example:
+                  name: Bruce Wayne
+                  username: imbatman
+                  email: batman@gotica.cl
+                  password: '12345'
+            example:
+              name: Bruce Wayne
+              username: imbatman
+              email: batman@gotica.cl
+              password: '12345'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /clients/update/679aac1e2a87b842e15b44ad:
+    put:
+      tags:
+      - CLIENT
+      summary: UPDATE CLIENT BY ID
+      operationId: UPDATECLIENTBYID
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UPDATECLIENTBYIDREQUEST'
+              - example:
+                  password: marcelo
+            example:
+              password: marcelo
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /clients/client-login:
+    post:
+      tags:
+      - CLIENT
+      summary: CLIENT LOGIN
+      operationId: CLIENTLOGIN
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CLIENTLOGINREQUEST'
+              - example:
+                  username: la_guada
+                  password: '12345'
+            example:
+              username: la_guada
+              password: '12345'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /clients/verify-client:
+    get:
+      tags:
+      - CLIENT
+      summary: VERIFY CLIENT
+      operationId: VERIFYCLIENT
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+components:
+  schemas:
+    CREATEARTICLEREQUEST:
+      title: CREATEARTICLEREQUEST
+      required:
+      - name
+      - price
+      - size
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: integer
+          format: int32
+        size:
+          type: string
+      example:
+        name: Smarth mouse
+        price: 25000
+        size: S
+    UPDATEARTICLEBYIDREQUEST:
+      title: UPDATEARTICLEBYIDREQUEST
+      required:
+      - name
+      - price
+      - size
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: integer
+          format: int32
+        size:
+          type: string
+      example:
+        name: Interactive rubber smart mouse
+        price: 25000
+        size: S
+    CREATECLIENTREQUEST:
+      title: CREATECLIENTREQUEST
+      required:
+      - name
+      - username
+      - email
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: Bruce Wayne
+        username: imbatman
+        email: batman@gotica.cl
+        password: '12345'
+    UPDATECLIENTBYIDREQUEST:
+      title: UPDATECLIENTBYIDREQUEST
+      required:
+      - password
+      type: object
+      properties:
+        password:
+          type: string
+      example:
+        password: marcelo
+    CLIENTLOGINREQUEST:
+      title: CLIENTLOGINREQUEST
+      required:
+      - username
+      - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      example:
+        username: la_guada
+        password: '12345'
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+- name: Articles
+- name: CLIENT

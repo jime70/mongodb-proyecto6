@@ -91,23 +91,11 @@ exports.updateClientById = async (req, res) => {
  
         if (client.password) {
             const { password } = client;
-
             const salt = await bcryptjs.genSalt(10);
-
             const hashedPassword = await bcryptjs.hash(password, salt);
-
             client.password = hashedPassword;
-            console.log(client.password)
         }
 
-        // const { name, username, email, password } = req.body;
-
-        // if (password) {
-        //     const salt = await bcryptjs.genSalt(10);
-        //     // console.log('salt =>', salt)
-        //     req.body.password = await bcryptjs.hash(password, salt)
-             
-        // }
 
         const updateClient = await Client.findByIdAndUpdate(idClient,  client , { new: true });
         res.json({updateClient});
