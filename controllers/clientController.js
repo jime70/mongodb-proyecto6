@@ -88,8 +88,7 @@ exports.updateClientById = async (req, res) => {
         const idClient  = req.params.id;
 
         const client = req.body;
-        console.log(client)
-
+ 
         if (client.password) {
             const { password } = client;
 
@@ -110,7 +109,7 @@ exports.updateClientById = async (req, res) => {
              
         // }
 
-        const updateClient = await Client.findByIdAndUpdate(idClient, { client }, { new: true });
+        const updateClient = await Client.findByIdAndUpdate(idClient,  client , { new: true });
         res.json({updateClient});
     } catch (error) {
         res.status(500).json({ message: 'There was an error updating the information', error });
