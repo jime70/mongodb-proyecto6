@@ -88,6 +88,7 @@ exports.updateClientById = async (req, res) => {
         const idClient  = req.params.id;
 
         const client = req.body;
+        console.log(client)
 
         if (client.password) {
             const { password } = client;
@@ -97,6 +98,7 @@ exports.updateClientById = async (req, res) => {
             const hashedPassword = await bcryptjs.hash(password, salt);
 
             client.password = hashedPassword;
+            console.log(client.password)
         }
 
         // const { name, username, email, password } = req.body;
