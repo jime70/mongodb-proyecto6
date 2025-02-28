@@ -26,22 +26,31 @@ exports.deleteClientById = async (req, res) => {
 
 
 exports.ClientRegistration = async (req, res) => { 
-    const { name, username, email, password } = req.body    
+    const { name, username, email, password } = req.body;    
 	try {
 		const salt = await bcryptjs.genSalt(10);
-        console.log('salt =>', salt)
-		const hashedPassword = await bcryptjs.hash(password, salt)
+		const hashedPassword = await bcryptjs.hash(password, salt);
+
+        // ✅ Crear usuario en la base de datos
         const createdClient = await Client.create({
             name,
 			username, 
 			email, 
 			password: hashedPassword
-        })
-		return res.json(createdClient);
+        });
+
+        // ✅ Generar token de autenticación
+        const payload = { user: { id: createdClient.id } };
+        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1h" });
+
+		// ✅ Devolver el token y los datos del usuario recién creado
+		return res.json({ token, user: createdClient });
+
 	} catch (error) {
         return res.status(400).json({ msg: 'There was an error creating the data, please check the information provided' });
     }
 };
+
 
 exports.clientLogin = async (req, res) => { 
     const { username, password } = req.body;
