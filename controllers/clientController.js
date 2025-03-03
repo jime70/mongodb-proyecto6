@@ -53,22 +53,22 @@ exports.ClientRegistration = async (req, res) => {
     }
 };
 exports.clientLogin = async (req, res) => { 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
-        let foundCient = await Client.findOne({ username });
+        let foundCient = await Client.findOne({ email });
         if (!foundCient) {
-            return res.status(400).json({ message: 'The username does not exist, verify information.' });
+            return res.status(400).json({ message: 'The email does not exist, verify information.' });
         }
         const correctPassword = await bcryptjs.compare(password, foundCient.password); 
         if (!correctPassword){
-            return res.status(400).json({ message: 'The username or the password does not exist, please try again.' });
+            return res.status(400).json({ message: 'The email or the password does not exist, please try again.' });
         }
         const payload = { user: {  id: foundCient.id } };
         jwt.sign(
             payload,
             process.env.SECRET,
             {
-                expiresIn: 120
+                expiresIn: 3600
             },
             (error, token) => {
                 if (error) throw error;
