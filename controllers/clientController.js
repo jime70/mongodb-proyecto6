@@ -25,33 +25,33 @@ exports.deleteClientById = async (req, res) => {
 };
 
 
-exports.ClientRegistration = async (req, res) => { 
-    const { name, username, email, password } = req.body;    
-	try {
-		const salt = await bcryptjs.genSalt(10);
-		const hashedPassword = await bcryptjs.hash(password, salt);
+exports.ClientRegistration = async (req, res) => {
+    const { name, username, email, password } = req.body;
 
-        // ✅ Crear usuario en la base de datos
-        const createdClient = await Client.create({
+    try {
+        const existingClient = await Client.findOne({ username });
+        if (existingClient) {
+            return res.status(400).json({ msg: "El usuario ya existe" });
+        }
+
+        const salt = await bcryptjs.genSalt(10);
+        const hashedPassword = await bcryptjs.hash(password, salt);
+
+        const newClient = new Client({
             name,
-			username, 
-			email, 
-			password: hashedPassword
+            username,
+            email,
+            password: hashedPassword
         });
 
-        // ✅ Generar token de autenticación
-        const payload = { user: { id: createdClient.id } };
-        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1h" });
+        await newClient.save();
 
-		// ✅ Devolver el token y los datos del usuario recién creado
-		return res.json({ token, user: createdClient });
-
-	} catch (error) {
-        return res.status(400).json({ msg: 'There was an error creating the data, please check the information provided' });
+        res.status(201).json({ msg: "Registro exitoso", client: newClient });
+    } catch (error) {
+        console.error("Error en ClientRegistration:", error);
+        res.status(500).json({ msg: "Error en el servidor", error });
     }
 };
-
-
 exports.clientLogin = async (req, res) => { 
     const { username, password } = req.body;
     try {

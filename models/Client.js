@@ -41,8 +41,8 @@ const clientSchema = mongoose.Schema({
     timestamps: true
 });
 
-const Client = mongoose.model("Client", clientSchema);
-module.exports = Client;
+
+module.exports = mongoose.model("Client", clientSchema);
 
 
 // Ejs.
