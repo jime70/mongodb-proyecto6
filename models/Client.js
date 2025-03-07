@@ -17,6 +17,11 @@ const clientSchema = mongoose.Schema({
         trim: true,
         unique: true
     },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
+        default: null,
+    },
     password: {
         type: String,
         required: function(){ return this.isNew },

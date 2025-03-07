@@ -1,24 +1,20 @@
-const jwt = require('jsonwebtoken');
-module.exports = (req, res, next) => {
-    let { authorization } = req.headers;
+const jwt = require("jsonwebtoken");
 
-    console.log("Header recibido en el backend:", authorization); // <-- Agregado
+module.exports = function (req, res, next) {
+    // Obtener el token del header
+    const token = req.header("x-auth-token");
 
-    if (!authorization) {
-        return res.status(401).json({ msg: "Unauthorized access" });
+    if (!token) {
+        return res.status(401).json({ msg: "No hay token, permiso no válido" });
     }
-    try {
-        let [type, token] = authorization.split(" ");
 
-        if (type === "Token" || type === "Bearer") {
-            const openToken = jwt.verify(token, process.env.SECRET);
-            console.log("Token decodificado:", openToken); // <-- Agregado
-            req.user = openToken.user;
-            next();
-        } else { 
-            return res.status(401).json({ msg: "Unauthorized access" });
-        }
+    try {
+        console.log("Token recibido en middleware:", token);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.client = decoded; 
+        next();
     } catch (error) {
-        res.status(401).json({ msg: "Invalid token", error });
+        console.error("Error en la verificación del token:", error);
+        res.status(401).json({ msg: "Token no válido" });
     }
 };
