@@ -6,7 +6,7 @@ const checkoutController = require("../controllers/checkoutController");
 /**
  * @swagger
  * /api/checkout/create-checkout-session:
- *   get:
+ *   post:
  *     summary: Crear sesión de pago con Stripe
  *     tags: [Checkout]
  *     security:
@@ -14,14 +14,16 @@ const checkoutController = require("../controllers/checkoutController");
  *     responses:
  *       200:
  *         description: Sesión de pago creada
+ *       400:
+ *         description: Error en la solicitud
  */
-router.get("/create-checkout-session", authorization, checkoutController.createCheckoutSession);
+router.post("/create-checkout-session", authorization, checkoutController.createCheckoutSession);
 
 /**
  * @swagger
  * /api/checkout/create-order:
  *   post:
- *     summary: Crear orden
+ *     summary: Crear orden después del pago exitoso
  *     tags: [Checkout]
  *     requestBody:
  *       content:
@@ -33,7 +35,9 @@ router.get("/create-checkout-session", authorization, checkoutController.createC
  *                 type: object
  *     responses:
  *       200:
- *         description: Orden creada
+ *         description: Orden creada exitosamente
+ *       400:
+ *         description: Error en la creación de la orden
  */
 router.post("/create-order", express.raw({ type: "application/json" }), checkoutController.createOrder);
 
@@ -41,23 +45,31 @@ router.post("/create-order", express.raw({ type: "application/json" }), checkout
  * @swagger
  * /api/checkout/create-cart:
  *   post:
- *     summary: Crear carrito de compras
+ *     summary: Crear un nuevo carrito para el usuario autenticado
  *     tags: [Checkout]
+ *     security:
+ *       - ApiKeyAuth: []
  *     responses:
  *       200:
- *         description: Carrito creado
+ *         description: Carrito creado exitosamente
+ *       400:
+ *         description: Error en la creación del carrito
  */
-router.post("/create-cart", checkoutController.createCart);
+router.post("/create-cart", authorization, express.json(), checkoutController.createCart);
 
 /**
  * @swagger
  * /api/checkout/get-cart:
  *   get:
- *     summary: Obtener carrito de compras
+ *     summary: Obtener el carrito del usuario autenticado
  *     tags: [Checkout]
+ *     security:
+ *       - ApiKeyAuth: []
  *     responses:
  *       200:
- *         description: Carrito de compras obtenido
+ *         description: Carrito de compras obtenido correctamente
+ *       400:
+ *         description: Error al obtener el carrito
  */
 router.get("/get-cart", authorization, checkoutController.getCart);
 
@@ -65,12 +77,37 @@ router.get("/get-cart", authorization, checkoutController.getCart);
  * @swagger
  * /api/checkout/edit-cart:
  *   put:
- *     summary: Editar carrito de compras
+ *     summary: Editar el carrito del usuario autenticado
  *     tags: [Checkout]
+ *     security:
+ *       - ApiKeyAuth: []
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     quantity:
+ *                       type: integer
+ *                     price:
+ *                       type: number
+ *                     name:
+ *                       type: string
+ *                     img:
+ *                       type: string
+ *                     slug:
+ *                       type: string
  *     responses:
  *       200:
- *         description: Carrito actualizado
+ *         description: Carrito actualizado exitosamente
+ *       400:
+ *         description: Error al actualizar el carrito
  */
-router.put("/edit-cart", authorization, checkoutController.editCart);
+router.put("/edit-cart", authorization, express.json(), checkoutController.editCart);
 
 module.exports = router;

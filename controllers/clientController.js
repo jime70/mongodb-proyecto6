@@ -1,6 +1,7 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Client = require('../models/Client');
+const Cart = require("../models/Cart");
 
 exports.getAllClients = async (req, res) => {
     try {
@@ -33,7 +34,7 @@ exports.ClientRegistration = async (req, res) => {
     const { name, username, email, password } = req.body;
 
     try {
-        const existingClient = await Client.findOne({ email }); // ⚠️ Verifica por email, no username
+        const existingClient = await Client.findOne({ email });
         if (existingClient) {
             return res.status(400).json({ msg: "El usuario ya existe" });
         }
@@ -41,28 +42,23 @@ exports.ClientRegistration = async (req, res) => {
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
 
-        const newClient = new Client({
-            name,
-            username,
-            email,
-            password: hashedPassword
-        });
-
+        const newClient = new Client({ name, username, email, password: hashedPassword });
         await newClient.save();
 
-        const payload = { user: { id: newClient._id } };  
+        // 📌 Crear un carrito vacío para el nuevo usuario
+        const newCart = new Cart({ client: newClient._id, products: [] });
+        await newCart.save();
 
+        newClient.cart = newCart._id;
+        await newClient.save();
+
+        const payload = { user: { id: newClient._id } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(201).json({
             msg: "Registro exitoso",
-            token, 
-            client: {
-                id: newClient._id,
-                name: newClient.name,
-                email: newClient.email,
-                username: newClient.username
-            }
+            token,
+            client: { id: newClient._id, name: newClient.name, email: newClient.email, username: newClient.username }
         });
 
     } catch (error) {
