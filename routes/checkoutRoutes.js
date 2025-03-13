@@ -3,6 +3,15 @@ const router = express.Router();
 const authorization = require("../middleware/authorization");
 const checkoutController = require("../controllers/checkoutController");
 
+// ✅ Importamos las funciones correctamente antes de usarlas
+const { 
+    createCheckoutSession, 
+    createOrder, 
+    createCart, 
+    getCart, 
+    editCart 
+} = checkoutController;
+
 /**
  * @swagger
  * /api/checkout/create-checkout-session:
@@ -17,7 +26,7 @@ const checkoutController = require("../controllers/checkoutController");
  *       400:
  *         description: Error en la solicitud
  */
-router.post("/create-checkout-session", authorization, checkoutController.createCheckoutSession);
+router.post("/create-checkout-session", authorization, createCheckoutSession);
 
 /**
  * @swagger
@@ -39,7 +48,7 @@ router.post("/create-checkout-session", authorization, checkoutController.create
  *       400:
  *         description: Error en la creación de la orden
  */
-router.post("/create-order", express.raw({ type: "application/json" }), checkoutController.createOrder);
+router.post("/create-order", express.raw({ type: "application/json" }), createOrder);
 
 /**
  * @swagger
@@ -55,7 +64,7 @@ router.post("/create-order", express.raw({ type: "application/json" }), checkout
  *       400:
  *         description: Error en la creación del carrito
  */
-router.post("/create-cart", authorization, express.json(), checkoutController.createCart);
+router.post("/create-cart", authorization, express.json(), createCart);
 
 /**
  * @swagger
@@ -71,7 +80,7 @@ router.post("/create-cart", authorization, express.json(), checkoutController.cr
  *       400:
  *         description: Error al obtener el carrito
  */
-router.get("/get-cart", authorization, checkoutController.getCart);
+router.get("/get-cart", authorization, getCart);
 
 /**
  * @swagger
@@ -108,6 +117,6 @@ router.get("/get-cart", authorization, checkoutController.getCart);
  *       400:
  *         description: Error al actualizar el carrito
  */
-router.put("/edit-cart", authorization, express.json(), checkoutController.editCart);
+router.put("/edit-cart", authorization, express.json(), editCart);
 
 module.exports = router;

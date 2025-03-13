@@ -1,21 +1,23 @@
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Client = require('../models/Client');
+const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const Client = require("../models/Client");
 const Cart = require("../models/Cart");
 
-exports.getAllClients = async (req, res) => {
+// ✅ Obtener todos los clientes
+const getAllClients = async (req, res) => {
     try {
-        const users = await Client.find().select('-password');
+        const users = await Client.find().select("-password");
         res.json({ users });
     } catch (error) {
         res.status(500).json({
             msg: "Error obteniendo clientes",
-            error: error.message
+            error: error.message,
         });
     }
 };
 
-exports.deleteClientById = async (req, res) => {
+// ✅ Eliminar cliente por ID
+const deleteClientById = async (req, res) => {
     try {
         const { id } = req.params;
         const clientDeleted = await Client.findByIdAndDelete(id);
@@ -30,7 +32,8 @@ exports.deleteClientById = async (req, res) => {
     }
 };
 
-exports.ClientRegistration = async (req, res) => {
+// ✅ Registrar un cliente
+const ClientRegistration = async (req, res) => {
     const { name, username, email, password } = req.body;
 
     try {
@@ -52,22 +55,22 @@ exports.ClientRegistration = async (req, res) => {
         newClient.cart = newCart._id;
         await newClient.save();
 
-        const payload = { user: { id: newClient._id } };
+        const payload = { client: { id: newClient._id } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(201).json({
             msg: "Registro exitoso",
             token,
             client: { id: newClient._id, name: newClient.name, email: newClient.email, username: newClient.username }
-        });
-
+        })
     } catch (error) {
         console.error("Error en ClientRegistration:", error);
         res.status(500).json({ msg: "Error en el servidor", error });
     }
 };
 
-exports.clientLogin = async (req, res) => {
+// ✅ Iniciar sesión de cliente
+const clientLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         const client = await Client.findOne({ email });
@@ -76,15 +79,11 @@ exports.clientLogin = async (req, res) => {
             return res.status(400).json({ message: "Usuario no encontrado" });
         }
 
-        // Comparar la contraseña ingresada con la almacenada
         const isMatch = await bcryptjs.compare(password, client.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Contraseña incorrecta" });
         }
 
-        // 🔹 Verificar que la clave secreta está definida
-        console.log("Clave JWT cargada en el backend:", process.env.JWT_SECRET);
-        
         const token = jwt.sign(
             { id: client._id, email: client.email },
             process.env.JWT_SECRET,
@@ -92,36 +91,32 @@ exports.clientLogin = async (req, res) => {
         );
 
         res.json({ token, client });
-
     } catch (error) {
         console.error("Error en clientLogin:", error);
         res.status(500).json({ message: "Error en el servidor" });
     }
 };
 
-exports.ClientVerification = async (req, res) => {
+// ✅ Verificar cliente autenticado
+const ClientVerification = async (req, res) => {
     try {
-        console.log("Token recibido en verify-client:", req.user); 
-        
-        if (!req.user || !req.user.id) {
+        if (!req.client || !req.client.id) {
             return res.status(401).json({ msg: "Token inválido o usuario no autorizado" });
         }
+        const client = await Client.findById(req.client.id).select('-password');
 
-        const client = await Client.findById(req.user.id).select('-password');
-        
         if (!client) {
             return res.status(404).json({ message: "Cliente no encontrado" });
         }
-
         res.json({ client });
-
     } catch (error) {
         console.error("Error en ClientVerification:", error);
         res.status(500).json({ message: "Error interno en la verificación", error });
-    }  
+    }
 };
 
-exports.updateClientById = async (req, res) => {
+// ✅ Actualizar cliente
+const updateClientById = async (req, res) => {
     try {
         const idClient = req.params.id;
         const client = req.body;
@@ -132,7 +127,6 @@ exports.updateClientById = async (req, res) => {
         }
 
         const updatedClient = await Client.findByIdAndUpdate(idClient, client, { new: true });
-
         if (!updatedClient) {
             return res.status(404).json({ message: "Cliente no encontrado" });
         }
@@ -141,4 +135,33 @@ exports.updateClientById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error actualizando cliente", error });
     }
+};
+
+// ✅ Verificar Token
+const verifyToken = async (req, res) => {
+    try {
+        const foundClient = await Client.findById(req.client.id).select("-password");
+
+        return res.json({
+            msg: "Datos de cliente encontrados.",
+            data: foundClient,
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            msg: "El usuario no se encuentra identificado.",
+        });
+    }
+};
+
+// ✅ Exportar todas las funciones correctamente
+module.exports = {
+    getAllClients,
+    deleteClientById,
+    ClientRegistration,
+    clientLogin,
+    ClientVerification,
+    updateClientById,
+    verifyToken
 };
