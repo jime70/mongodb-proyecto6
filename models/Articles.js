@@ -26,11 +26,19 @@ const articleSchema = new mongoose.Schema({
         type: Number,
         required: function(){ return this.isNew }
     },
-    category: { // 🔹 Cambiado de categoryProduct a category
+    category: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: true
     },
+    priceID: { 
+        type: String, 
+        default: null 
+    },  
+    stripeProductID: { 
+        type: String, 
+        default: null } 
+}, {
     Timestamp: {
         type: Date,
         default: Date.now
