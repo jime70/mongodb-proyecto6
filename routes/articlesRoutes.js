@@ -13,6 +13,6 @@ ArticlesRoutes.put('/update-articles/:id', updateArticleById); //localhost:3003/
 ArticlesRoutes.delete('/delete-articles/:id', deleteArticleById); //localhost:3003/api/articles/delete-articles/:id
 
 ArticlesRoutes.post("/stripe/create/:articleID", createStripeProduct); //localhost:3003/api/stripe/create/:articleID
-ArticlesRoutes.post("/create-checkout-session", createCheckoutSession); //localhost:3003/api/checkout/create-checkout-session
+// ArticlesRoutes.post("/create-checkout-session", createCheckoutSession); //localhost:3003/api/checkout/create-checkout-session
 
 module.exports = ArticlesRoutes;

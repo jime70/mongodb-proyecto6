@@ -13,7 +13,7 @@ const createStripeProduct = async (req, res) => {
       description: article.description,
     });
 
-    const priceData = await stripe.prices.create({
+    const priceData = await stripe.price.create({
       unit_amount: article.price,
       currency: "clp",
       product: product.id,

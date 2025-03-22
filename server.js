@@ -3,10 +3,9 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 
-// Importar las rutas
 const ArticlesRoutes = require("./routes/articlesRoutes");
 const ClientRoutes = require("./routes/clientRoutes");
-const CheckoutRoutes = require("./routes/checkoutRoutes");  // Nueva ruta para Stripe
+const CheckoutRoutes = require("./routes/checkoutRoutes");  
 
 dotenv.config();
 connectDB();
