@@ -1,12 +1,9 @@
 const Stripe = require('stripe')
-const mongoose = require('mongoose');
 require('dotenv').config();
-const Article = require('../models/Articles')
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.createSession = async (req, res) => {
-    const { nameArticle, descCorta, image, priceArticle, quantity  } = req.body;
     try {
         const session = await stripe.checkout.sessions.create({
             line_items: [
@@ -14,13 +11,12 @@ exports.createSession = async (req, res) => {
                     price_data: {
                         currency: 'clp',
                         product_data: {
-                            name: nameArticle,
-                            description: descCorta,
-                            images: [image],
+                            name: 'T-shirt',
+                            description: 'Comfortable cotton t-shirt',
                         },
-                        unit_amount: priceArticle.unit_amount,
+                        unit_amount: 2000,
                     },
-                    quantity: quantity,
+                    quantity: 1,
                 },
             ],
             mode: 'payment',

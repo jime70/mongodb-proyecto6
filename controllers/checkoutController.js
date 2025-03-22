@@ -1,11 +1,10 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-// ✅ Crear una sesión de pago con Stripe
 const createCheckoutSession = async (req, res) => {
   try {
     console.log("📥 Recibiendo datos del carrito en el backend:", req.body);
 
-    const { cart } = req.body; // 🟢 Recibimos el carrito desde el frontend
+    const { cart } = req.body; 
 
     if (!cart || cart.length === 0) {
       return res.status(400).json({ error: "El carrito está vacío" });
@@ -13,7 +12,7 @@ const createCheckoutSession = async (req, res) => {
 
     const line_items = cart.map((item) => {
       return {
-        price: item.price, // Este debe ser el priceID generado desde Stripe
+        price: item.price, 
         quantity: item.quantity,
       };
     });
@@ -34,7 +33,6 @@ const createCheckoutSession = async (req, res) => {
   }
 };
 
-// Otras funciones dummy por ahora (puedes reemplazarlas con lógica real)
 const createOrder = (req, res) => {
   res.json({ message: "Orden creada" });
 };

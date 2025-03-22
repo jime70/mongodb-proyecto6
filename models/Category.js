@@ -13,7 +13,7 @@ const categorySchema = mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['article', 'pet', 'client'], // Define los tipos posibles
+        enum: ['article', 'pet', 'client'], 
         required: true
     }
 });

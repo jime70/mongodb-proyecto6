@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/authorization'); // <-- Asegúrate de esto
+const auth = require('../middleware/authorization'); 
 const {
   createCheckoutSession,
   createOrder,

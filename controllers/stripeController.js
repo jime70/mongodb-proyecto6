@@ -41,13 +41,11 @@ const createCheckoutSession = async (req, res) => {
       return res.status(400).json({ message: "El carrito está vacío." });
     }
 
-    // Crear la línea de pago con los productos del carrito
     const lineItems = cart.map((item) => ({
       price: item.priceID,
       quantity: item.quantity,
     }));
 
-    // Crear sesión de pago
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,

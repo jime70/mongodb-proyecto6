@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const Client = require("../models/Client");
 const Cart = require("../models/Cart");
 
-// ✅ Obtener todos los clientes
 const getAllClients = async (req, res) => {
     try {
         const users = await Client.find().select("-password");
@@ -16,7 +15,6 @@ const getAllClients = async (req, res) => {
     }
 };
 
-// ✅ Eliminar cliente por ID
 const deleteClientById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -48,7 +46,6 @@ const ClientRegistration = async (req, res) => {
         const newClient = new Client({ name, username, email, password: hashedPassword });
         await newClient.save();
 
-        // 📌 Crear un carrito vacío para el nuevo usuario
         const newCart = new Cart({ client: newClient._id, products: [] });
         await newCart.save();
 
@@ -69,7 +66,6 @@ const ClientRegistration = async (req, res) => {
     }
 };
 
-// ✅ Iniciar sesión de cliente
 const clientLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -97,7 +93,6 @@ const clientLogin = async (req, res) => {
     }
 };
 
-// ✅ Verificar cliente autenticado
 const ClientVerification = async (req, res) => {
     try {
         if (!req.client || !req.client.id) {
@@ -115,7 +110,6 @@ const ClientVerification = async (req, res) => {
     }
 };
 
-// ✅ Actualizar cliente
 const updateClientById = async (req, res) => {
     try {
         const idClient = req.params.id;
@@ -137,7 +131,6 @@ const updateClientById = async (req, res) => {
     }
 };
 
-// ✅ Verificar Token
 const verifyToken = async (req, res) => {
     try {
         const foundClient = await Client.findById(req.client.id).select("-password");
@@ -155,7 +148,6 @@ const verifyToken = async (req, res) => {
     }
 };
 
-// ✅ Exportar todas las funciones correctamente
 module.exports = {
     getAllClients,
     deleteClientById,
