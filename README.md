@@ -56,11 +56,16 @@ npm install
 
 Crea un archivo .env en la raíz del proyecto con este contenido:
 
-PORT=3003
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-STRIPE_SECRET_KEY=your_stripe_secret_key
-FRONTEND_URL=http://localhost:5173
+- PORT=3003
+- MONGODB_URI=your_mongodb_connection_string
+- JWT_SECRET=your_jwt_secret
+- STRIPE_SECRET_KEY=your_stripe_secret_key
+- FRONTEND_URL=http://localhost:5173
+- SUCCESS_URL:http://localhost:5173/checkout-success
+- CANCEL_URL:http://localhost:5173/checkout-cancel
+
+Para efectos del proyecto, base de datos fue subida a MONGO ATLAS con enpoint:
+MONGODB_URI=mongodb+srv://jimenaespinoza:admin@bootcampudd.1qx3j.mongodb.net/?retryWrites=true&w=majority&appName=BOOTCAMPUDD
 
 ## 5. Estructura del Proyecto
 
@@ -91,6 +96,7 @@ FRONTEND_URL=http://localhost:5173
 ├── 📜 .env
 ├── 📜 package.json
 ├── 📜 .gitignore
+```	
 
 **CARPETAS PRINCIPALES**
 **6.	Carpeta routes**
