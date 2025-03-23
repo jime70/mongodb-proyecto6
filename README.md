@@ -4,7 +4,7 @@
 - [2. Acceder al proyecto](#2-acceder-al-proyecto)
 - [3. Instalar dependencias](#3-instalar-dependencias)
 - [4. Crear archivo .env y configurar tus variables de entorno](#4-crear-archivo-env-y-configurar-tus-variables-de-entorno)
-- [5. Estructura del Proyecto](#5-estructura-del-proyecto)
+  - [5. Estructura del Proyecto](#5-estructura-del-proyecto)
 
 
 **Requisitos**
@@ -62,30 +62,31 @@ JWT_SECRET=your_jwt_secret
 STRIPE_SECRET_KEY=your_stripe_secret_key
 FRONTEND_URL=http://localhost:5173
 
-# 5. Estructura del Proyecto
+## 5. Estructura del Proyecto
 
-```📦 MONGODB-PROYECTO6
+```bash
+📦 MONGODB-PROYECTO6
 ├── 📂 config
-│ └── db.js
+│   └── db.js
 ├── 📂 controllers
-│ ├── articlesController.js
-│ ├── clientController.js
-│ ├── checkoutController.js
-│ ├── paymentController.js
-│ └── stripeController.js
+│   ├── articlesController.js
+│   ├── clientController.js
+│   ├── checkoutController.js
+│   ├── paymentController.js
+│   └── stripeController.js
 ├── 📂 middleware
-│ └── authorization.js
+│   └── authorization.js
 ├── 📂 models
-│ ├── Article.js
-│ ├── Cart.js
-│ ├── Category.js
-│ ├── Client.js
-│ └── Pet.js
+│   ├── Article.js
+│   ├── Cart.js
+│   ├── Category.js
+│   ├── Client.js
+│   └── Pet.js
 ├── 📂 routes
-│ ├── articlesRoutes.js
-│ ├── clientRoutes.js
-│ ├── checkoutRoutes.js
-│ └── paymentRoutes.js
+│   ├── articlesRoutes.js
+│   ├── clientRoutes.js
+│   ├── checkoutRoutes.js
+│   └── paymentRoutes.js
 ├── 📜 server.js
 ├── 📜 .env
 ├── 📜 package.json
