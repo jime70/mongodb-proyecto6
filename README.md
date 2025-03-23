@@ -64,7 +64,7 @@ FRONTEND_URL=http://localhost:5173
 
 # 5. Estructura del Proyecto
 
-📦 MONGODB-PROYECTO6
+```📦 MONGODB-PROYECTO6
 ├── 📂 config
 │ └── db.js
 ├── 📂 controllers
