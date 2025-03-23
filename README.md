@@ -1,212 +1,129 @@
-# Proyecto 6: Aplicación Backend con Autenticación
+**Proyecto Backend: E-commerce con Autenticación y Pasarela de Pagos**
+**Tabla de Contenidos**
+- [1. Clonar el repositorio](#1-clonar-el-repositorio)
+- [2. Acceder al proyecto](#2-acceder-al-proyecto)
+- [3. Instalar dependencias](#3-instalar-dependencias)
+- [4. Crear archivo .env y configurar tus variables de entorno](#4-crear-archivo-env-y-configurar-tus-variables-de-entorno)
+- [5. Estructura del Proyecto](#5-estructura-del-proyecto)
 
-## Tabla de Contenidos
 
-1. [Requisitos](#requisitos)
-2. [Introducción](#introducción)
-3. [Instalación](#instalación)
-4. [Estructura del Proyecto](#estructura-del-proyecto)
-5. [Implementación de Archivos y Componentes](#implementación-de-archivos-y-componentes)
-6. [Documentación](#documentación)
-7. [Contacto](#contacto)
+**Requisitos**
+Asegúrate de tener instalado:
 
----
+- Node.js
+- npm
+- MongoDB Atlas (cuenta y conexión configurada)
+- Stripe (cuenta para pruebas)
 
-## Requisitos
+**Dependencias necesarias:**
 
-Para ejecutar este proyecto, necesitas instalar los siguientes paquetes:
 
-- NodeJS
-- Express
-- Bcryptjs
-- jsonwebtoken
-- Cors
-- dotenv
-- mongoose
-- nodemon
+- express 
+- mongoose 
+- bcryptjs 
+- jsonwebtoken 
+- cors 
+- dotenv 
+- nodemon 
+- stripe
 
----
+**Introducción**
+Este backend fue desarrollado con Node.js y Express, conectado a una base de datos MongoDB Atlas.
 
-## Introducción
+**Incluye:**
 
-Este proyecto consiste en una aplicación backend que implementa autenticación y gestiona dos colecciones: clientes y productos. Incluye procesos de:
+Autenticación de clientes con JWT
+CRUD de productos
+Gestión del carrito de compras
+Integración con Stripe para pagos reales
+Protección de rutas con middleware
+Modelado de datos con Mongoose
 
-- Registro y login de clientes.
-- Autenticación mediante tokens JWT (JSON Web Tokens).
-- Uso de MongoDB y Mongoose para la gestión de datos.
-- Documentación con OpenAPI y Swagger.
-- Despliegue en Render y MongoDB Atlas.
 
----
+# 1. Clonar el repositorio
 
-## Instalación
+git clone https://github.com/usuario/MONGODB_PROYECTO6.git
 
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/usuario/mongodb-proyecto6
-   ```
-2. Acceder al directorio del proyecto:
-   ```bash
-   cd mongodb-proyecto6
-   ```
-3. Instalar las dependencias:
-   ```bash
-   npm install
-   ```
-4. Configurar el archivo `.env`. Crear un archivo `.env` con el siguiente contenido:
-   ```
-   PORT=3003
-   MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/?retryWrites=true&w=majority&appName=BOOTCAMPUDD
-   SECRET=UCAMP
-   URL_BD=mongodb://localhost:27017/merchandise_db
-   ```
-5. Ejecutar la aplicación:
-   ```bash
-   npm start
-   ```
+# 2. Acceder al proyecto
 
----
+cd MONGODB_PROYECTO6
 
-## Estructura del Proyecto
+# 3. Instalar dependencias
 
-```
-📦 mongodb-proyecto6
+npm install
+
+# 4. Crear archivo .env y configurar tus variables de entorno 
+
+Crea un archivo .env en la raíz del proyecto con este contenido:
+
+PORT=3003
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+STRIPE_SECRET_KEY=your_stripe_secret_key
+FRONTEND_URL=http://localhost:5173
+
+# 5. Estructura del Proyecto
+
+📦 MONGODB-PROYECTO6
 ├── 📂 config
-│   ├── db.js
-│   📂 controllers
-│   ├── articlesController.js
-│   ├── clientController.js
-│   📂 middleware
-│   ├── authorization.js
-│   📂 models
-│   ├── Articles.js
-│   ├── Clients.js
-│   📂 node_modules
-│   📂 routes
-│   ├── articlesRoutes.js
-│   ├── clientRoutes.js
-├── 📜 .env
-├── 📜 .gitignore
-├── 📜 package-lock.json
-├── 📜 package.json
+│ └── db.js
+├── 📂 controllers
+│ ├── articlesController.js
+│ ├── clientController.js
+│ ├── checkoutController.js
+│ ├── paymentController.js
+│ └── stripeController.js
+├── 📂 middleware
+│ └── authorization.js
+├── 📂 models
+│ ├── Article.js
+│ ├── Cart.js
+│ ├── Category.js
+│ ├── Client.js
+│ └── Pet.js
+├── 📂 routes
+│ ├── articlesRoutes.js
+│ ├── clientRoutes.js
+│ ├── checkoutRoutes.js
+│ └── paymentRoutes.js
 ├── 📜 server.js
-```
+├── 📜 .env
+├── 📜 package.json
+├── 📜 .gitignore
 
----
+**CARPETAS PRINCIPALES**
+**6.	Carpeta routes**
+La carpeta /routes organiza todos los endpoints del backend. Cada archivo define las rutas de una funcionalidad específica de la aplicación, y conecta las peticiones HTTP con los controladores que contienen la lógica correspondiente.
+Estas rutas son utilizadas por el servidor para dirigir las solicitudes entrantes hacia el controlador adecuado.
+Los archivos principales son:
+- articlesRoutes.js: Rutas para crear, leer, actualizar y eliminar productos. También conecta productos con Stripe.
+- clientRoutes.js: Rutas para registrar, autenticar, verificar y administrar clientes.
+- checkoutRoutes.js: Rutas protegidas con JWT para gestionar el carrito de compras y crear sesiones de pago.
+- paymentRoutes.js: Rutas de prueba para crear sesiones de pago simples con Stripe y manejar los resultados de éxito o cancelación.
 
-## Implementación de Archivos y Componentes
+**7.	Carpeta /models**
+La carpeta /models contiene los esquemas de Mongoose que definen la estructura de los datos almacenados en MongoDB. Cada modelo representa una colección dentro de la base de datos y establece qué campos debe tener cada documento, su tipo de dato y sus relaciones con otras colecciones. Estos modelos son esenciales para interactuar de forma organizada con la base de datos.
+Los modelos principales son:
+- Client.js: define los datos del cliente, incluyendo nombre, correo, dirección, teléfono y su carrito asociado.
 
-### 1. `server.js`
-Configura el servidor con Node.js y Express, definiendo los endpoints para gestionar los artículos y clientes.
+**8. Carpeta /controllers**
+Esta carpeta contiene la lógica que gestiona las operaciones principales del sistema. Cada archivo responde a solicitudes específicas que provienen de las rutas y se comunica con la base de datos a través de los modelos.
 
-#### Rutas disponibles:
-- `/api/articles` → Gestión de artículos.
-- `/api/clients` → Gestión de clientes.
+- clientController.js
+Gestiona el registro, login, verificación con JWT y edición de clientes.
 
-El servidor se ejecuta en el puerto definido en `.env` o en el `3003` por defecto.
+- articlesController.js
+Maneja las operaciones CRUD de productos en la tienda.
 
----
+- checkoutController.js
+Controla la creación, modificación y recuperación del carrito de compras. También conecta el carrito con Stripe para generar sesiones de pago reales.
 
-### 2. Modelos (`models/`)
-Define la estructura de datos para artículos y clientes en MongoDB.
+- paymentController.js
+Implementa sesiones de pago de prueba con Stripe y muestra mensajes de éxito o cancelación.
 
-#### `Articles.js`
-```js
-const mongoose = require('mongoose');
-const articleSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
-    size: { type: String, required: true },
-    timestamp: { type: Date, default: Date.now }
-});
-const Article = mongoose.model('Article', articleSchema);
-module.exports = Article;
-```
-
-#### `Clients.js`
-```js
-const mongoose = require("mongoose");
-const clientSchema = mongoose.Schema({
-    name: { type: String, required: true },
-    username: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true }
-}, {
-    timestamps: true
-});
-const Client = mongoose.model("clients", clientSchema);
-module.exports = Client;
-```
-
----
-
-### 3. Controladores (`controllers/`)
-
-Los controladores procesan las solicitudes del cliente y gestionan la interacción con la base de datos.
-
-#### `articlesController.js`
-- `getArticles`: Obtiene todos los artículos.
-- `getArticleById`: Busca un artículo por ID.
-- `createArticle`: Crea un nuevo artículo.
-- `updateArticleById`: Actualiza un artículo.
-- `deleteArticleById`: Elimina un artículo.
-
-#### `clientController.js`
-- `getAllClients`: Obtiene todos los clientes.
-- `deleteClientById`: Elimina un cliente.
-- `ClientRegistration`: Registra un nuevo cliente con contraseña cifrada.
-- `clientLogin`: Genera un token JWT para autenticación.
-- `ClientVerification`: Verifica usuarios autenticados.
-- `updateClientById`: Actualiza los datos de un cliente.
-
-Ejemplo de uso:
-Cuando un usuario solicita `GET /api/articles`, el controlador accede a la base de datos y devuelve la lista de artículos.
-
----
-
-### 4. Middleware (`middleware/`)
-
-El archivo `authorization.js` maneja la autenticación con JWT.
-
-#### Cómo funciona:
-1. Verifica si la solicitud contiene un token JWT válido.
-2. Decodifica el token y extrae la información del usuario.
-3. Permite el acceso si el token es válido; de lo contrario, devuelve un error `401 Unauthorized`.
-
-Ejemplo de uso en `clientRoutes.js`:
-```js
-clientRoutes.get('/verify-client', auth, ClientVerification);
-```
-
----
-
-### 5. Rutas (`routes/`)
-
-Define las rutas de la API.
-
-Ejemplo de uso:
-```js
-articlesRoutes.post('/create', createArticle); // localhost:3003/api/articles/create
-```
-
----
-
-## Documentación
-
-### 1. Despliegue en Render
-
-El proyecto está desplegado en:
-[https://mongodb-proyecto6.onrender.com](https://mongodb-proyecto6.onrender.com)
-
-### 2. Swagger
-
-La documentación OpenAPI está en:
-`PROYECTO-6 MONGO.postman_collection.json-OpenApi3Yaml`
-
----
-
-## Contacto
-
-Para consultas, puedes contactarme en:
+Contacto
 📧 jimenaespinoza@gmail.com
-
+👩‍💻 Desarrollado por Jimena Espinoza
+🎓 Proyecto académico - Cohorte 16
+📦 Backend completo con autenticación y Stripe
+**
